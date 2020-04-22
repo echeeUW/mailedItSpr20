@@ -1,4 +1,4 @@
-package com.ericchee.mailedit
+package com.ericchee.mailedit.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

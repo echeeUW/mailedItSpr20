@@ -1,12 +1,15 @@
-package com.ericchee.mailedit
+package com.ericchee.mailedit.activity
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.all_emails.*
+import com.ericchee.mailedit.EmailAdapter
+import com.ericchee.mailedit.R
+import com.ericchee.mailedit.model.Email
+import kotlinx.android.synthetic.main.activity_list_emails.*
 
-class AllEmailsActivity : AppCompatActivity() {
+class ListEmailsActivity : AppCompatActivity() {
 
     private lateinit var emailAdapter: EmailAdapter
 
@@ -15,16 +18,32 @@ class AllEmailsActivity : AppCompatActivity() {
         const val EMAIL_RESULT_DATA = "emailResultData"
     }
 
+    private val initialEmails = mutableListOf(
+        Email("seahawks@gmail.com", "Go Hawks!!! SEA!! HAWKSSS!!!! Go 12s! Legion of boom"),
+        Email("49ers@hotmail.com", "Let's go Niners!!! Richard Sherman interception! Ay bay bay"),
+        Email("patriots@aol.com", "We like flat footballs and spy cameras")
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.all_emails)
+        setContentView(R.layout.activity_list_emails)
 
-
-        emailAdapter = EmailAdapter(listOf())
+        emailAdapter = EmailAdapter(initialEmails)
         rvAllEmails.adapter = emailAdapter
 
+        emailAdapter.onEmailClicked = { email ->
+
+            startActivity(
+                Intent(this, EmailDetailActivity::class.java).apply {
+                    putExtra(EmailDetailActivity.INTENT_KEY_EMAIL, email)
+                }
+            )
+        }
+
         btnCompose.setOnClickListener {
-            startActivityForResult(Intent(this, ComposeActivity::class.java), COMPOSE_REQUEST_CODE)
+            startActivityForResult(Intent(this, ComposeActivity::class.java),
+                COMPOSE_REQUEST_CODE
+            )
         }
     }
 
@@ -45,10 +64,3 @@ class AllEmailsActivity : AppCompatActivity() {
     }
 
 }
-
-
-
-//class Foo {
-//    public const final Int count = 1234
-//
-//}

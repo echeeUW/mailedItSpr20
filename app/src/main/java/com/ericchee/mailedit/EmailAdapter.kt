@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ericchee.mailedit.model.Email
 
 class EmailAdapter(
     emails: List<Email>
 ): RecyclerView.Adapter<EmailAdapter.EmailViewHolder>() {
 
+    var onEmailClicked: ((email: Email) -> Unit)? = null
     private val emails =  emails.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmailViewHolder {
@@ -33,12 +35,15 @@ class EmailAdapter(
         notifyDataSetChanged()
     }
 
-    class EmailViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class EmailViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
          private val tvFrom = itemView.findViewById<TextView>(R.id.tvFrom)
 
         fun bind(email: Email) {
             tvFrom.text = email.from
 
+            itemView.setOnClickListener {
+                onEmailClicked?.invoke(email)
+            }
         }
     }
 }

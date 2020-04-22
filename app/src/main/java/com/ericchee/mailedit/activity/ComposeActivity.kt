@@ -1,9 +1,11 @@
-package com.ericchee.mailedit
+package com.ericchee.mailedit.activity
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.ericchee.mailedit.R
+import com.ericchee.mailedit.model.Email
 import kotlinx.android.synthetic.main.activity_compose.*
 
 class ComposeActivity : AppCompatActivity() {
@@ -24,7 +26,7 @@ class ComposeActivity : AppCompatActivity() {
 
 
             val resultData = Intent().apply {
-                putExtra(AllEmailsActivity.EMAIL_RESULT_DATA, email)
+                putExtra(ListEmailsActivity.EMAIL_RESULT_DATA, email)
             }
             setResult(Activity.RESULT_OK, resultData)
             // Kill this activity
