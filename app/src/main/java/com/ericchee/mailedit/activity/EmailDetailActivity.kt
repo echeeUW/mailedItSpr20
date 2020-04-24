@@ -20,8 +20,6 @@ class EmailDetailActivity : AppCompatActivity() {
 
             initSendEmailButton(email)
         }
-
-
     }
 
     private fun initSendEmailButton(email: Email) {

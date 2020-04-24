@@ -17,6 +17,8 @@ class EmailDetailFragment : Fragment() {
     private var email: Email? = null
 
     companion object {
+        val TAG: String = EmailDetailFragment::class.java.simpleName
+        
         const val ARG_EMAIL = "arg_email"
     }
 
@@ -32,6 +34,11 @@ class EmailDetailFragment : Fragment() {
 
     }
 
+    fun updateEmail(email: Email) {
+        this.email = email
+        updateEmailViews()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +50,10 @@ class EmailDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        updateEmailViews()
+    }
+
+    private fun updateEmailViews() {
         email?.let {
             tvFrom.text = it.from
             tvContent.text = it.content

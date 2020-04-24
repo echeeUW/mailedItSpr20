@@ -17,11 +17,8 @@ class EmailAdapter(
     private val emails =  emails.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmailViewHolder {
-        return EmailViewHolder(
-            LayoutInflater.from(
-                parent.context
-            ).inflate(R.layout.item_email, parent, false)
-        )
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_email, parent, false)
+        return EmailViewHolder(view)
     }
 
     override fun getItemCount(): Int = emails.size

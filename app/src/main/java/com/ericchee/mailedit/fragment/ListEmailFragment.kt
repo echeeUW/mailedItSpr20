@@ -1,5 +1,6 @@
 package com.ericchee.mailedit.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import com.ericchee.mailedit.R
 import com.ericchee.mailedit.activity.ComposeActivity
 import com.ericchee.mailedit.activity.EmailDetailActivity
 import com.ericchee.mailedit.activity.ListEmailsActivity
+import com.ericchee.mailedit.activity.UltimateMainActivity
 import com.ericchee.mailedit.model.Email
 import kotlinx.android.synthetic.main.fragment_list_emails.*
 
@@ -19,14 +21,21 @@ class ListEmailFragment: Fragment() {
 
     private lateinit var emailAdapter: EmailAdapter
 
+    private var onEmailSelectedListener: OnEmailSelectedListener? = null
+
     private val initialEmails = listOf(
         Email("seahawks@gmail.com", "Go Hawks!!! SEA!! HAWKSSS!!!! Go 12s! Legion of boom"),
         Email("49ers@hotmail.com", "Let's go Niners!!! Richard Sherman interception! Ay bay bay"),
         Email("patriots@aol.com", "We like flat footballs and spy cameras")
     )
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
-
+        if (context is OnEmailSelectedListener) {
+            onEmailSelectedListener = context
+        }
+    }
 
 
     override fun onCreateView(
@@ -34,7 +43,6 @@ class ListEmailFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return layoutInflater.inflate(R.layout.fragment_list_emails, container, false)
     }
 
@@ -45,14 +53,8 @@ class ListEmailFragment: Fragment() {
         rvAllEmails.adapter = emailAdapter
 
         emailAdapter.onEmailClicked = { email ->
-
-            val intent = Intent(context, EmailDetailActivity::class.java).apply {
-                putExtra(EmailDetailActivity.INTENT_KEY_EMAIL, email)
-            }
-
-            startActivity(intent)
+            onEmailSelectedListener?.onEmailSelected(email)
         }
-
 
         btnCompose.setOnClickListener {
             startActivityForResult(Intent(context, ComposeActivity::class.java),
@@ -60,4 +62,9 @@ class ListEmailFragment: Fragment() {
             )
         }
     }
+
+}
+
+interface OnEmailSelectedListener {
+    fun onEmailSelected(email: Email)
 }
