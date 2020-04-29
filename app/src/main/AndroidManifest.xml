@@ -8,6 +8,7 @@
         android:label="HELLLLOOO"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".MailedItApp"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.UltimateMainActivity">
             <intent-filter>

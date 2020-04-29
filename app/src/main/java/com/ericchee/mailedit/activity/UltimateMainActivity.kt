@@ -2,13 +2,13 @@ package com.ericchee.mailedit.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.View
+import com.ericchee.mailedit.MailedItApp
 import com.ericchee.mailedit.R
 import com.ericchee.mailedit.fragment.EmailDetailFragment
 import com.ericchee.mailedit.fragment.ListEmailFragment
 import com.ericchee.mailedit.fragment.OnEmailSelectedListener
 import com.ericchee.mailedit.model.Email
-import kotlinx.android.synthetic.main.activity_ultimate_main.*
 
 class UltimateMainActivity : AppCompatActivity(), OnEmailSelectedListener {
 
@@ -19,16 +19,21 @@ class UltimateMainActivity : AppCompatActivity(), OnEmailSelectedListener {
         val emailDetailFragment = EmailDetailFragment()
         val argumentBundle = Bundle().apply {
             val email =  Email("marky@aol.com", "yooooo homieeeee")
-
             putParcelable(EmailDetailFragment.ARG_EMAIL, email)
         }
         emailDetailFragment.arguments = argumentBundle
 
-        val emailListFragment = ListEmailFragment()
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragContainer, emailListFragment)
-            .commit()
+
+        if (supportFragmentManager.findFragmentByTag(EmailDetailFragment.TAG) == null) {
+            // There is no email detail fragment
+            val emailListFragment = ListEmailFragment()
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragContainer, emailListFragment)
+                .commit()
+        } else {
+            // Email Detail Fragment already exists
+        }
 
         supportFragmentManager.addOnBackStackChangedListener {
             val hasBackStack = supportFragmentManager.backStackEntryCount > 0
@@ -52,11 +57,7 @@ class UltimateMainActivity : AppCompatActivity(), OnEmailSelectedListener {
         var emailDetailFragment = getEmailDetailFragment()
 
         if (emailDetailFragment == null) {
-            emailDetailFragment = EmailDetailFragment()
-            val argumentBundle = Bundle().apply {
-                putParcelable(EmailDetailFragment.ARG_EMAIL, email)
-            }
-            emailDetailFragment.arguments = argumentBundle
+            emailDetailFragment = EmailDetailFragment.getInstance(email, "Eric chee")
 
             supportFragmentManager
                 .beginTransaction()

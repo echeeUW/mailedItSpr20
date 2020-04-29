@@ -1,5 +1,6 @@
 package com.ericchee.mailedit.activity
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -38,6 +39,13 @@ class EmailDetailActivity : AppCompatActivity() {
 
     companion object {
         const val INTENT_KEY_EMAIL = "INTENT_KEY_EMAIL"
+
+        fun getIntent(email: Email, context: Context): Intent {
+            val intent = Intent(context, EmailDetailActivity::class.java)
+            intent.putExtra(INTENT_KEY_EMAIL, email)
+
+            return intent
+        }
     }
 
 }

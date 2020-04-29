@@ -1,9 +1,0 @@
-
-back
-
-ActivtyWelcome
-FragmentLogin <---- uid
-ActivityTutorial
-ActivityAIntro
-
-bottom

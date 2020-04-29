@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.ericchee.mailedit.EmailAdapter
+import com.ericchee.mailedit.MailedItApp
 import com.ericchee.mailedit.R
 import com.ericchee.mailedit.activity.ComposeActivity
 import com.ericchee.mailedit.activity.EmailDetailActivity
@@ -23,14 +25,15 @@ class ListEmailFragment: Fragment() {
 
     private var onEmailSelectedListener: OnEmailSelectedListener? = null
 
-    private val initialEmails = listOf(
-        Email("seahawks@gmail.com", "Go Hawks!!! SEA!! HAWKSSS!!!! Go 12s! Legion of boom"),
-        Email("49ers@hotmail.com", "Let's go Niners!!! Richard Sherman interception! Ay bay bay"),
-        Email("patriots@aol.com", "We like flat footballs and spy cameras")
-    )
+    private lateinit var initialEmails: List<Email>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        val mailedItApp = (context.applicationContext as MailedItApp)
+
+        this.initialEmails = mailedItApp.listOfEmails
+
 
         if (context is OnEmailSelectedListener) {
             onEmailSelectedListener = context
@@ -52,15 +55,27 @@ class ListEmailFragment: Fragment() {
         emailAdapter = EmailAdapter(initialEmails)
         rvAllEmails.adapter = emailAdapter
 
+
+
         emailAdapter.onEmailClicked = { email ->
+
+            (context?.applicationContext as? MailedItApp)?.let { mailedItApp ->
+                mailedItApp.onEmailRead()
+            }
+
             onEmailSelectedListener?.onEmailSelected(email)
         }
 
         btnCompose.setOnClickListener {
-            startActivityForResult(Intent(context, ComposeActivity::class.java),
+            startActivityForResult(
+                Intent(context, ComposeActivity::class.java),
                 ListEmailsActivity.COMPOSE_REQUEST_CODE
             )
         }
+
+//        context?.getString(R.string.app_name)
+//        context?.getDrawable(R.drawable.ic_launcher_foreground)
+//        context?.startActivity()
     }
 
 }

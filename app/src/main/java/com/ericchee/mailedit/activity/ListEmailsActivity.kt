@@ -1,6 +1,7 @@
 package com.ericchee.mailedit.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,8 @@ class ListEmailsActivity : AppCompatActivity() {
     companion object {
         const val COMPOSE_REQUEST_CODE = 1235
         const val EMAIL_RESULT_DATA = "emailResultData"
+
+        fun getIntent(context: Context) = Intent(context, ListEmailsActivity::class.java)
     }
 
     private val initialEmails = mutableListOf(
@@ -33,11 +36,8 @@ class ListEmailsActivity : AppCompatActivity() {
 
         emailAdapter.onEmailClicked = { email ->
 
-            startActivity(
-                Intent(this, EmailDetailActivity::class.java).apply {
-                    putExtra(EmailDetailActivity.INTENT_KEY_EMAIL, email)
-                }
-            )
+            val intent = EmailDetailActivity.getIntent(email, this)
+            startActivity(intent)
         }
 
         btnCompose.setOnClickListener {
