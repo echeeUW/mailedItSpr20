@@ -8,6 +8,9 @@ class MailedItApp: Application() {
 
     lateinit var listOfEmails: List<Email>
     var readEmailCount = 0
+    private var recentlyViewedEmail: Email? = null
+
+    var emailReadListener: EmailReadListener? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -19,8 +22,16 @@ class MailedItApp: Application() {
         )
     }
 
-    fun onEmailRead() {
+    fun onEmailRead(email: Email) {
+        recentlyViewedEmail = email
         readEmailCount++
+
+        emailReadListener?.onEmailRead(email)
     }
 
+
+}
+
+interface EmailReadListener {
+    fun onEmailRead(email: Email)
 }

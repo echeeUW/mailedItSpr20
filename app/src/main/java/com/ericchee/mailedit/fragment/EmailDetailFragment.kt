@@ -34,16 +34,13 @@ class EmailDetailFragment : Fragment() {
                 }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        with(arguments!!) {
-            val email = getParcelable<Email>(ARG_EMAIL)
-
-
-
-        }
 
         arguments?.let { args ->
             val email = args.getParcelable<Email>(ARG_EMAIL)
@@ -85,7 +82,7 @@ class EmailDetailFragment : Fragment() {
 
         // get Unread count
         val unreadCount = (context?.applicationContext as MailedItApp).readEmailCount
-        Toast.makeText(context, "Number of emails read is $unreadCount", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, "Number of emails read is $unreadCount", Toast.LENGTH_SHORT).show()
 
         updateEmailViews()
     }
