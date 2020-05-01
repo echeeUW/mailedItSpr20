@@ -2,37 +2,46 @@ package com.ericchee.mailedit.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import com.ericchee.mailedit.MailedItApp
 import com.ericchee.mailedit.R
 import com.ericchee.mailedit.fragment.EmailDetailFragment
 import com.ericchee.mailedit.fragment.ListEmailFragment
 import com.ericchee.mailedit.fragment.OnEmailSelectedListener
 import com.ericchee.mailedit.model.Email
+import kotlinx.android.synthetic.main.activity_ultimate_main.*
 
 class UltimateMainActivity : AppCompatActivity(), OnEmailSelectedListener {
+
+    private lateinit var listOfEmails: List<Email>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ultimate_main)
 
-        val emailDetailFragment = EmailDetailFragment()
-        val argumentBundle = Bundle().apply {
-            val email =  Email("marky@aol.com", "yooooo homieeeee")
-            putParcelable(EmailDetailFragment.ARG_EMAIL, email)
-        }
-        emailDetailFragment.arguments = argumentBundle
-
+        listOfEmails = listOf(
+            Email("seahawks@gmail.com", "Go Hawks!!! SEA!! HAWKSSS!!!! Go 12s! Legion of boom"),
+            Email("49ers@hotmail.com", "Let's go Niners!!! Richard Sherman interception! Ay bay bay"),
+            Email("patriots@aol.com", "We like flat footballs and spy cameras")
+        )
+//        val email =  Email("marky@aol.com", "yooooo homieeeee")
+//        val emailDetailFragment = EmailDetailFragment.getInstance(email, "jabbawockeez")
 
         if (supportFragmentManager.findFragmentByTag(EmailDetailFragment.TAG) == null) {
             // There is no email detail fragment
-            val emailListFragment = ListEmailFragment()
+            val listFragment = ListEmailFragment.getInstance(listOfEmails)
+
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragContainer, emailListFragment)
+                .add(R.id.fragContainer, listFragment, ListEmailFragment.TAG)
+                .addToBackStack(ListEmailFragment.TAG)
                 .commit()
         } else {
             // Email Detail Fragment already exists
+
+        }
+
+        btnShuffle.setOnClickListener {
+            val listFragment = supportFragmentManager.findFragmentByTag(ListEmailFragment.TAG) as ListEmailFragment
+            listFragment.addNewEmail()
         }
 
         supportFragmentManager.addOnBackStackChangedListener {

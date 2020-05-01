@@ -22,7 +22,7 @@ class EmailDetailFragment : Fragment() {
 
     companion object {
         val TAG: String = EmailDetailFragment::class.java.simpleName
-        
+
         const val ARG_EMAIL = "arg_email"
         const val ARG_USERNAME = "ARG_USERNAME"
 
@@ -32,10 +32,18 @@ class EmailDetailFragment : Fragment() {
                         putString(ARG_USERNAME, username)
                     }
                 }
-            }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        with(arguments!!) {
+            val email = getParcelable<Email>(ARG_EMAIL)
+
+
+
+        }
 
         arguments?.let { args ->
             val email = args.getParcelable<Email>(ARG_EMAIL)
@@ -75,8 +83,8 @@ class EmailDetailFragment : Fragment() {
             val nonNullEmail = it
         }
 
+        // get Unread count
         val unreadCount = (context?.applicationContext as MailedItApp).readEmailCount
-
         Toast.makeText(context, "Number of emails read is $unreadCount", Toast.LENGTH_SHORT).show()
 
         updateEmailViews()

@@ -14,7 +14,7 @@ class EmailAdapter(
 ): RecyclerView.Adapter<EmailAdapter.EmailViewHolder>() {
 
     var onEmailClicked: ((email: Email) -> Unit)? = null
-    private val emails =  emails.toMutableList()
+    private var emails =  emails.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmailViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_email, parent, false)
@@ -29,6 +29,12 @@ class EmailAdapter(
 
     fun addEmail(email: Email) {
         emails.add(email)
+        notifyDataSetChanged()
+    }
+
+    fun updateList(list: List<Email>) {
+        this.emails = list.toMutableList()
+
         notifyDataSetChanged()
     }
 

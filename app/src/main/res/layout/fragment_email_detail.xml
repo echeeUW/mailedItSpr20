@@ -7,7 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".activity.EmailDetailActivity"
     android:padding="16dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    >
 
 
     <ImageView
