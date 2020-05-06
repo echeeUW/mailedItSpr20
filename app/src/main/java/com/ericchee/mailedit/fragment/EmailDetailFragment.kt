@@ -81,7 +81,7 @@ class EmailDetailFragment : Fragment() {
         }
 
         // get Unread count
-        val unreadCount = (context?.applicationContext as MailedItApp).readEmailCount
+        val unreadCount = (context?.applicationContext as MailedItApp).emailManager.readEmailCount
 //        Toast.makeText(context, "Number of emails read is $unreadCount", Toast.LENGTH_SHORT).show()
 
         updateEmailViews()

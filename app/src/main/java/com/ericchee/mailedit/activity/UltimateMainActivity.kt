@@ -3,8 +3,7 @@ package com.ericchee.mailedit.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import com.ericchee.mailedit.EmailReadListener
+import com.ericchee.mailedit.manager.EmailReadListener
 import com.ericchee.mailedit.MailedItApp
 import com.ericchee.mailedit.R
 import com.ericchee.mailedit.fragment.EmailDetailFragment
@@ -13,7 +12,8 @@ import com.ericchee.mailedit.fragment.OnEmailSelectedListener
 import com.ericchee.mailedit.model.Email
 import kotlinx.android.synthetic.main.activity_ultimate_main.*
 
-class UltimateMainActivity : AppCompatActivity(), OnEmailSelectedListener, EmailReadListener {
+class UltimateMainActivity : AppCompatActivity(), OnEmailSelectedListener,
+    EmailReadListener {
 
     private lateinit var listOfEmails: List<Email>
 
@@ -21,27 +21,20 @@ class UltimateMainActivity : AppCompatActivity(), OnEmailSelectedListener, Email
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ultimate_main)
 
-        val app = application as MailedItApp
+        val emailApp = application as MailedItApp
 
-        app.emailReadListener = this
+        emailApp.emailManager.emailReadListener = this
 
-        if (supportFragmentManager.findFragmentByTag(EmailDetailFragment.TAG) == null) {
-            // There is no email detail fragment
-            val listFragment = ListEmailFragment.getInstance()
+        val listFragment = ListEmailFragment.getInstance()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragContainer, listFragment, ListEmailFragment.TAG)
+            .addToBackStack(ListEmailFragment.TAG)
+            .commit()
 
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragContainer, listFragment, ListEmailFragment.TAG)
-                .addToBackStack(ListEmailFragment.TAG)
-                .commit()
-        } else {
-            // Email Detail Fragment already exists
-
-        }
-
-        btnShuffle.setOnClickListener {
+        btnCompose.setOnClickListener {
             val listFragment = supportFragmentManager.findFragmentByTag(ListEmailFragment.TAG) as ListEmailFragment
-            listFragment.addNewEmail()
+            listFragment.shuffle()
         }
 
         supportFragmentManager.addOnBackStackChangedListener {

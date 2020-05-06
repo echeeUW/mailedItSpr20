@@ -10,6 +10,7 @@ import com.ericchee.mailedit.EmailAdapter
 import com.ericchee.mailedit.MailedItApp
 import com.ericchee.mailedit.R
 import com.ericchee.mailedit.activity.UltimateMainActivity
+import com.ericchee.mailedit.manager.EmailManager
 import com.ericchee.mailedit.model.Email
 import kotlinx.android.synthetic.main.fragment_list_emails.*
 
@@ -20,7 +21,11 @@ class ListEmailFragment: Fragment() {
 
     private var onEmailSelectedListener: OnEmailSelectedListener? = null
 
-    private var application: MailedItApp? = null
+
+    private lateinit var emailManager: EmailManager
+
+
+
     private lateinit var listOfEmails: List<Email>
 
     companion object {
@@ -38,7 +43,7 @@ class ListEmailFragment: Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        application = (context.applicationContext as MailedItApp)
+        emailManager = (context.applicationContext as MailedItApp).emailManager
 
         if (context is OnEmailSelectedListener) {
             onEmailSelectedListener = context
@@ -47,6 +52,25 @@ class ListEmailFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        this.listOfEmails = emailManager.listOfEmails
+
+        // Same thing as ^
+//        application?.listOfEmails?.let {
+//            this.listOfEmails = it
+//        } ?: run {
+//            this.listOfEmails = listOf()
+//        }
+
+
+//        // Same thing as ^
+//        val curList = application?.listOfEmails
+//        if (curList != null) {
+//            this.listOfEmails = curList
+//        } else {
+//            this.listOfEmails = listOf()
+//        }
     }
 
 
@@ -64,26 +88,26 @@ class ListEmailFragment: Fragment() {
         emailAdapter = EmailAdapter(listOfEmails)
         rvAllEmails.adapter = emailAdapter
 
-        application?.readEmailCount
+        emailManager.readEmailCount
 
         emailAdapter.onEmailClicked = { email ->
 
             val mailApp = (context?.applicationContext as? MailedItApp)
-            mailApp?.onEmailRead(email)
+            emailManager.onEmailRead(email)
 
             onEmailSelectedListener?.onEmailSelected(email)
         }
 
         btnCompose.setOnClickListener {
-
+            emailManager?.shuffle()
+            listOfEmails = emailManager.listOfEmails ?: listOf()
+            emailAdapter.notifyDataSetChanged()
         }
     }
 
-    fun addNewEmail() {
-        listOfEmails = listOfEmails.toMutableList().apply {
-            add(Email("questcrew@gmail.cinm", "Season 3 ABDC Winners"))
-        }.toList()
-
+    fun shuffle() {
+        emailManager.shuffle()
+        listOfEmails = emailManager.listOfEmails ?: listOf()
         emailAdapter.updateList(listOfEmails)
     }
 
